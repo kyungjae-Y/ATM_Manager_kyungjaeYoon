@@ -1,4 +1,4 @@
-package ATM;
+package Controller;
 /*
 [1] 관리자 [2] 사용자 [0] 종료
 
@@ -25,23 +25,36 @@ package ATM;
 마이페이지 : 내계좌(+잔고) 목록 확인
  */
 
+import DAO.AccountDAO;
+import DAO.ClientDAO;
+import Util.FileManager;
+import Util.InputManager;
+
 public class BankController {
 	final String bankName = "그냥 은행";
 
-	AccountDAO aDAO;
-	ClientDAO cDAO;
-	Util scan;
+	private AccountDAO aDAO;
+	private ClientDAO cDAO;
+	private FileManager fm;
 
-//	생성자
-	BankController() {
+	public AccountDAO getaDAO() {
+		return aDAO;
+	}
+
+	public ClientDAO getcDAO() {
+		return cDAO;
+	}
+
+	// 생성자
+	public BankController() {
 		aDAO = new AccountDAO();
 		cDAO = new ClientDAO();
-		scan = new Util();
-		scan.tempData(aDAO, cDAO);
+		fm = new FileManager();
+		fm.tempData(aDAO, cDAO);
 	}
 
 //	실제 컨트롤하는 메서드
-	void run() {
+	public void run() {
 		int start = 0;
 		int end = 2;
 		while (true) {
@@ -49,14 +62,14 @@ public class BankController {
 			System.out.println("[1] 관리자");
 			System.out.println("[2] 사용자");
 			System.out.println("[0] 종료");
-			int sel = scan.getValue("선택", start, end);
+			int sel = InputManager.getValue("선택", start, end);
 			if (sel == 1) {
 				managerMenu();
 			} else if (sel == 2) {
 				ClientMenu();
 			} else if (sel == 0) {
 				System.out.println("종료");
-				scan.closeUtil();
+				InputManager.closeUtil();
 				break;
 			}
 		}
@@ -74,7 +87,7 @@ public class BankController {
 			System.out.println("[4] 데이터 저장");
 			System.out.println("[5] 데이터 불러오기");
 			System.out.println("[0] 뒤로가기");
-			int sel = scan.getValue("선택", start, end);
+			int sel = InputManager.getValue("선택", start, end);
 			if (sel == 1) {
 				cDAO.printClient();
 			} else if (sel == 2) {
@@ -82,9 +95,9 @@ public class BankController {
 			} else if (sel == 3) {
 				cDAO.adminDeleteClient(aDAO);
 			} else if (sel == 4) {
-				scan.saveToFile(aDAO, cDAO);
+				fm.saveToFile(aDAO, cDAO);
 			} else if (sel == 5) {
-				scan.loadFromFile(aDAO, cDAO);
+				fm.loadFromFile(aDAO, cDAO);
 			} else if (sel == 0) {
 				System.out.println("메인메뉴로 갑니다");
 				break;
@@ -101,7 +114,7 @@ public class BankController {
 			System.out.println("[1] 회원가입");
 			System.out.println("[2] 로그인");
 			System.out.println("[0] 뒤로가기");
-			int sel = scan.getValue("선택", start, end);
+			int sel = InputManager.getValue("선택", start, end);
 			if (sel == 1) {
 				cDAO.createClient();
 			} else if (sel == 2) {
@@ -130,7 +143,7 @@ public class BankController {
 			System.out.println("[6] 탈퇴");
 			System.out.println("[7] 마이 페이지");
 			System.out.println("[0] 로그아웃");
-			int sel = scan.getValue("선택", start, end);
+			int sel = InputManager.getValue("선택", start, end);
 			if (sel == 1) {
 				aDAO.addAccNumber(cDAO, id);
 			} else if (sel == 2) {

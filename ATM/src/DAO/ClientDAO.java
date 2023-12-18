@@ -1,37 +1,38 @@
-package ATM;
+package DAO;
+
+import Util.InputManager;
+import VO.Client;
 
 public class ClientDAO {
 	Client[] cList;
 	int cnt;
-	Util scan;
 	int maxClientNo;
 
 //	생성자
-	ClientDAO() {
+	public ClientDAO() {
 		cList = null;
 		cnt = 0;
-		scan = new Util();
 		maxClientNo = 1001;
 	}
 
 //	회원 가입
-	void createClient() {
-		String id = scan.getValue("ID : ");
+	public void createClient() {
+		String id = InputManager.getValue("ID : ");
 //		중복 확인
 		int idIdx = idIndex(id);
 		if (idIdx != -1) {
 			System.err.println("중복 ID 입니다");
 			return;
 		}
-		String pw = scan.getValue("PW : ");
-		String name = scan.getValue("이름 : ");
+		String pw = InputManager.getValue("PW : ");
+		String name = InputManager.getValue("이름 : ");
 		Client add = new Client(maxClientNo++, id, pw, name);
 		createClient(add, -1, 1, "가입");
 	}
 
 //	회원 탈퇴 - 관리자용
-	void adminDeleteClient(AccountDAO aDAO) {
-		String id = scan.getValue("ID : ");
+	public void adminDeleteClient(AccountDAO aDAO) {
+		String id = InputManager.getValue("ID : ");
 //		중복 확인
 		int idIdx = idIndex(id);
 		if (idIdx == -1)
@@ -42,8 +43,8 @@ public class ClientDAO {
 	}
 
 //	회원 탈퇴 - 사용자용
-	void deleteClient(String id, AccountDAO aDAO) {
-		String pw = scan.getValue("PW : ");
+	public void deleteClient(String id, AccountDAO aDAO) {
+		String pw = InputManager.getValue("PW : ");
 		int idIdx = idIndex(id); // 중복 확인
 		int pwIdx = idIndex(pw); // 중복 확인
 		if (idIdx != pwIdx) {
@@ -72,21 +73,21 @@ public class ClientDAO {
 	}
 
 //	회원 수정
-	void updateClient() {
-		String id = scan.getValue("ID : ");
+	public void updateClient() {
+		String id = InputManager.getValue("ID : ");
 		int idx = idIndex(id);
 		if (idx == -1) {
 			System.err.println("ID가 존재하지 않습니다");
 			return;
 		}
-		cList[idx].pw = scan.getValue("변경할 PW : ");
-		cList[idx].name = scan.getValue("변경할 이름 : ");
+		cList[idx].pw = InputManager.getValue("변경할 PW : ");
+		cList[idx].name = InputManager.getValue("변경할 이름 : ");
 		System.out.println("변경완료");
 		System.out.println(cList[idx]);
 	}
 
 //	회원 출력
-	void printClient() {
+	public void printClient() {
 		System.out.println("==============================");
 		System.out.printf("No \tid \tpw \tname\n");
 		System.out.println("------------------------------");
@@ -118,9 +119,9 @@ public class ClientDAO {
 	}
 
 //	사용자 메뉴 - 로그인 체크
-	String loginCheck() {
-		String id = scan.getValue("ID : ");
-		String pw = scan.getValue("pw : ");
+	public String loginCheck() {
+		String id = InputManager.getValue("ID : ");
+		String pw = InputManager.getValue("pw : ");
 		int idIdx = idIndex(id);
 		if (idIdx == -1) { // 중복 확인
 			System.out.println("id가 존재하지 않습니다");
@@ -146,7 +147,7 @@ public class ClientDAO {
 	}
 
 //	파일 저장위해 문자열로 만들어 보내기
-	String saveAsFileData() {
+	public String saveAsFileData() {
 		if (cnt == 0)
 			return "";
 		String data = "";
@@ -157,7 +158,7 @@ public class ClientDAO {
 	}
 
 //	파일에서 데이터 뽑아오기
-	void addClientFromData(String cData) {
+	public void addClientFromData(String cData) {
 		String[] temp = cData.split("\n");
 		cList = new Client[temp.length];
 		cnt = cList.length;

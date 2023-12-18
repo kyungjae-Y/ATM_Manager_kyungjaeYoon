@@ -1,13 +1,13 @@
-package ATM;
+package VO;
 
 // 회원
 public class Client {
-	int clientNo; // 1001부터 자동증가
-	String id;
-	String pw;
-	String name;
+	public int clientNo; // 1001부터 자동증가
+	public String id;
+	public String pw;
+	public String name;
 
-	Client(int clientNo, String id, String pw, String name) {
+	public Client(int clientNo, String id, String pw, String name) {
 		this.clientNo = clientNo;
 		this.id = id;
 		this.pw = pw;
@@ -19,7 +19,7 @@ public class Client {
 		return clientNo + "\t" + id + "\t" + pw + "\t" + name + "\n";
 	}
 
-	String saveToData() {
+	public String saveToData() {
 		return "%d/%s/%s/%s\n".formatted(clientNo, id, pw, name);
 	}
 }

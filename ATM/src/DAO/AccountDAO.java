@@ -1,20 +1,21 @@
-package ATM;
+package DAO;
+
+import Util.InputManager;
+import VO.Account;
 
 public class AccountDAO {
 	Account[] accList;
 	int cnt;
-	Util scan;
 
 //	생성자
-	AccountDAO() {
+	public AccountDAO() {
 		accList = null;
 		cnt = 0;
-		scan = new Util();
 	}
 
 //	계좌 추가
-	void addAccNumber(ClientDAO cDAO, String id) {
-		String accNumber = scan.getValue("계좌번호 : ");
+	public void addAccNumber(ClientDAO cDAO, String id) {
+		String accNumber = InputManager.getValue("계좌번호 : ");
 //		내 회원 계좌가 3개 이상이면 안됨
 		int cnt = cntAccNumber(id);
 		if (cnt > 2) {
@@ -97,8 +98,8 @@ public class AccountDAO {
 	}
 
 //	계좌 삭제 - 1개 삭제용
-	void delAccNumber(String id) {
-		String accNumber = scan.getValue("계좌번호 : ");
+	public void delAccNumber(String id) {
+		String accNumber = InputManager.getValue("계좌번호 : ");
 		int idx = MyAccCheck(id, accNumber);
 		if (idx == -1) {
 			System.err.println("id와 일치하는 계좌번호 없음");
@@ -126,8 +127,8 @@ public class AccountDAO {
 	}
 
 //	입금 - 내 통장
-	void inputAccMoney(String id) {
-		String accNumber = scan.getValue("계좌번호 : ");
+	public void inputAccMoney(String id) {
+		String accNumber = InputManager.getValue("계좌번호 : ");
 		int cnt = cntAccNumber(id);
 		if (cnt < 1) {
 			System.out.println("입금 할 계좌가 없습니다.");
@@ -138,7 +139,7 @@ public class AccountDAO {
 			System.err.println("id와 일치하는 계좌번호 없음");
 			return;
 		}
-		int money = scan.getValue("금액", 100, 1000000);
+		int money = InputManager.getValue("금액", 100, 1000000);
 		if (money == -1)
 			return;
 		accList[idx].money += money;
@@ -146,15 +147,15 @@ public class AccountDAO {
 	}
 
 //	출금 - 내 계좌
-	void ouputAccMoney(String id) {
-		String accNumber = scan.getValue("계좌번호 : ");
+	public void ouputAccMoney(String id) {
+		String accNumber = InputManager.getValue("계좌번호 : ");
 		int idx = MyAccCheck(id, accNumber);
 		if (idx == -1) {
 			System.err.println("id와 일치하는 계좌번호 없음");
 			return;
 		}
 		int myMoney = checkMyAccMoney(id, accNumber);
-		int money = scan.getValue("금액", 100, myMoney - 1);
+		int money = InputManager.getValue("금액", 100, myMoney - 1);
 		if (money == -1)
 			return;
 		accList[idx].money -= money;
@@ -172,14 +173,14 @@ public class AccountDAO {
 	}
 
 //	이체
-	void toAccMoney(String id) {
-		String myAccNumber = scan.getValue("이체 할 계좌번호 : ");
+	public void toAccMoney(String id) {
+		String myAccNumber = InputManager.getValue("이체 할 계좌번호 : ");
 		int myIdx = MyAccCheck(id, myAccNumber);
 		if (myIdx == -1) {
 			System.err.println("id와 일치하는 계좌번호 없음");
 			return;
 		}
-		String youAccNumber = scan.getValue("이체 받을 계좌번호 : ");
+		String youAccNumber = InputManager.getValue("이체 받을 계좌번호 : ");
 		if (myAccNumber.equals(youAccNumber)) {
 			System.out.println("같은 계좌 이체 불가능");
 			return;
@@ -190,7 +191,7 @@ public class AccountDAO {
 			return;
 		}
 		int myMoney = checkMyAccMoney(id, myAccNumber);
-		int money = scan.getValue("이체 할 금액", 100, myMoney - 1);
+		int money = InputManager.getValue("이체 할 금액", 100, myMoney - 1);
 		if (money == -1)
 			return;
 		accList[myIdx].money -= money;
@@ -199,7 +200,7 @@ public class AccountDAO {
 	}
 
 //	마이페이지
-	void printMyList(String id) {
+	public void printMyList(String id) {
 		if (cntAccNumber(id) == 0) {
 			System.out.println("계좌가 없습니다");
 			return;
@@ -216,7 +217,7 @@ public class AccountDAO {
 	}
 
 //	파일 저장위해 문자열로 만들어 보내기
-	String saveAsFileData() {
+	public String saveAsFileData() {
 		if (cnt == 0)
 			return "";
 		String data = "";
@@ -227,7 +228,7 @@ public class AccountDAO {
 	}
 
 //	파일에서 데이터 뽑아오기
-	void addAccountFromData(String aData) {
+	public void addAccountFromData(String aData) {
 		String[] temp = aData.split("\n");
 		accList = new Account[temp.length];
 		cnt = accList.length;

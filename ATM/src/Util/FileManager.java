@@ -1,47 +1,17 @@
-package ATM;
+package Util;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
 
-public class Util {
+import DAO.AccountDAO;
+import DAO.ClientDAO;
 
-	Scanner scan;
-
-//	생성자
-	Util() {
-		scan = new Scanner(System.in);
-	}
-
-//	숫자 예외사항 체크 후 반환
-	int getValue(String msg, int start, int end) {
-		System.out.printf("%s[%d-%d] : ", msg, start, end);
-		try {
-			int num = scan.nextInt();
-			scan.nextLine();
-			if (num < start || num > end) {
-				System.out.printf("[%d - %d] 사이값만 가능\n", start, end);
-			}
-			return num;
-		} catch (Exception e) {
-			scan.nextLine();
-			System.out.println("숫자값을 입력하세요");
-		}
-		return -1;
-	}
-
-	String getValue(String msg) {
-		System.out.print(msg);
-		String data = scan.next();
-		scan.nextLine();
-		return data;
-	}
-
+public class FileManager {
 //	account.txt , client.txt
 //	데이터 클래스에서 가져온다
-	void saveToFile(AccountDAO aDAO, ClientDAO cDAO) {
+	public void saveToFile(AccountDAO aDAO, ClientDAO cDAO) {
 		String aData = aDAO.saveAsFileData();
 		String cData = cDAO.saveAsFileData();
 
@@ -61,7 +31,7 @@ public class Util {
 	}
 
 //	데이터 클래스에 전달
-	void loadFromFile(AccountDAO aDAO, ClientDAO cDAO) {
+	public void loadFromFile(AccountDAO aDAO, ClientDAO cDAO) {
 		String aData = loadData("account.txt");
 		String cData = loadData("client.txt");
 
@@ -89,12 +59,11 @@ public class Util {
 		return data;
 	}
 
-	void tempData(AccountDAO aDAO, ClientDAO cDAO) {
+	public void tempData(AccountDAO aDAO, ClientDAO cDAO) {
 		String userdata = "1001/test01/pw1/김철수\n";
 		userdata += "1002/test02/pw2/이영희\n";
 		userdata += "1003/test03/pw3/신민수\n";
 		userdata += "1004/test04/pw4/최상민\n";
-
 		cDAO.addClientFromData(userdata);
 
 		String accountdata = "test01/1111-1111-1111/8000\n";
@@ -105,12 +74,6 @@ public class Util {
 		accountdata += "test02/6666-6666-6666/1000\n";
 		accountdata += "test03/7777-7777-7777/1000\n";
 		accountdata += "test04/8888-8888-8888/1000\n";
-
 		aDAO.addAccountFromData(accountdata);
-	}
-
-//	종료 시 닫기
-	void closeUtil() {
-		scan.close();
 	}
 }
